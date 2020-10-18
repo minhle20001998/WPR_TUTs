@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcards: Add a new word</title>
+
+    <style>
+      #main {
+        width: 500px;
+        margin: auto;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      form div {
+        margin: 15px 0;
+      }
+
+      form input {
+        padding: 8px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <h1>Add a new word</h1>
+      <!-- action="https://wpr-quiz-api.herokuapp.com/words" method="POST" -->
+      <form>
+        <div>
+          <label for="word">Word: </label>
+          <input type="text" name="word" id="word" />
+        </div>
+
+        <div>
+          <label for="definition">Definition: </label>
+          <input type="text" name="definition" id="definition" />
+        </div>
+      </form>
+      <div><button>Submit</button></div>
+    </div>
+
+    <script>
+      function onSubmit(event) {
+        // event.preventDefault(); // prevent normal form submit
+        // TODO: using fetch - alert success when added
+        const word = document.querySelector("#word").value;
+        const def = document.querySelector("#definition").value;
+        if (word != "" && def != "") {
+          fetchData(word, def);
+        }
+      }
+
+      async function fetchData(w, d) {
+        const url = "https://wpr-quiz-api.herokuapp.com/words";
+        const request = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        request.body = JSON.stringify({
+          word: w,
+          definition: d,
+        });
+        const myResponse = await fetch(url, request);
+        const WORDS = await myResponse.json();
+      }
+
+      const form = document.querySelector("button");
+      form.addEventListener("click", onSubmit);
+    </script>
+  </body>
+</html>
